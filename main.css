@@ -13,7 +13,7 @@ body {
 
 	/* https://cssgradient.io/gradient-backgrounds/ */
 	background: #c6ffdd;
-	background: linear-gradient( to right, #f7797d, #fbd786, #c6ffdd );
+	background: linear-gradient(to top left, powderblue, #ffc0cb);
 
 	display: flex;
 	justify-content: center;
@@ -66,10 +66,13 @@ body {
 	cursor: pointer;
 	width: 100%;
     display: block;
-	padding: 1rem 0.5rem;
+	padding: 1rem 0.5rem;	
+	opacity: .8;
+  	transition: .3s;  
 }
 
 .quiz-list label:hover {
+	opacity: 1;
 	background-color: seashell;
 }
 
@@ -114,11 +117,12 @@ body {
 	cursor: pointer;
 	font-size: 1.1rem;
 	font-family: inherit;
-
+  	transition: .3s;  
 }
 
 .submit:hover {
 	background-color: #732d91;
+	opacity: 1;
 }
 
 .submit:focus {
@@ -165,4 +169,44 @@ body {
 	60% {
 		transform: translate3d(4px, 0, 0);
 	}
+}
+.status { 
+	display: block;
+	color: red;
+	width: 100px;
+	height: 100px;
+}
+.hidden { 
+	display: none;
+}
+
+.loader{ 
+	
+	text-align: center;
+	border: 16px solid #f3f3f3; 
+	border-top: 16px solid #8e44ad; 
+	border-radius: 50%;
+	width: 6rem;
+	height: 6rem;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+  }
+
+.quiz-category{ 
+	width: 300px;
+}
+#category {
+	border-radius: 5px;
+}
+
+#category:hover { 
+	cursor: pointer;
+	background-color: seashell;
+	opacity: .8;
+  	transition: .3s;  
+	opacity: 1;
 }

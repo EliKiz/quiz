@@ -5,31 +5,27 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Simple Quiz</title>
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico">
 	<link rel="stylesheet" href="./main.css" />
 </head>
 <body>
 
-	<div class="quiz" id="quiz">
-
-		
-
+	<div class="loader"></div>
+	
+	<div class="quiz hidden" id="quiz">	
+		<form name="" class="quiz-form" action="#">
+			<div class="quiz-category">
+				<select name="" id="category">
+					<option class="category-option" value>Choose category</option>
+				</select>
+			</div>
+		</form>
 		<div class="quiz-header" id="header">
-
+		
 		</div>
 
 		<ul class="quiz-list" id="list">
-			<li>
-				<label>
-					<input type="radio" class="answer" name="answer" />
-					<span>Ответ...</span>
-				</label>
-			</li>
-			<li>
-				<label>
-					<input type="radio" class="answer" name="answer" />
-					<span>Ответ...</span>
-				</label>
-			</li>
+			
 		</ul>
 
 		<button class="quiz-submit submit" id="submit">Next</button>
