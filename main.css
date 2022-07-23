@@ -196,6 +196,9 @@ body {
 	100% { transform: rotate(360deg); }
   }
 
+.quiz-form { 
+	display: flex;
+}
 .quiz-category{ 
 	width: 300px;
 }
@@ -209,4 +212,18 @@ body {
 	opacity: .8;
   	transition: .3s;  
 	opacity: 1;
+}
+.quiz-progress { 
+	margin-left: auto;
+}
+.quiz-progress-bar {
+	width: 150px;
+	height: 10px;
+	border: 1px solid #8e44ad;
+	border-radius: 5px
+}
+.quiz-progress-bar-full {
+	height: 9px;
+	background-color: #8e44ad;
+	width: 0%;
 }
