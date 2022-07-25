@@ -5,6 +5,7 @@ const titleQuize = document.querySelector('#header'),
 	loader = document.querySelector('.loader'),
 	game = document.querySelector('.quiz'),
 	categories = document.querySelector('#category'),
+	categoriesOption = document.querySelectorAll('.category-option'),
 	progressText = document.querySelector('.quiz-bar-text'),
 	progressBarFull = document.querySelector('.quiz-progress-bar-full');
 	
@@ -13,42 +14,40 @@ const titleQuize = document.querySelector('#header'),
 	let questionIndex = 0; // текущий вопрос
 
 	let url ='https://the-trivia-api.com/api/questions?categories=history&limit=5&region=US&difficulty=medium';
-	
 
+	// === Render category ===
 	
 	function renderCategory() { 
 		const category = ['History', 'Music', 'Science', 'Geography'];
-
 		category.forEach((item, index) => {
 			categories.innerHTML += `
 			<option classs='category-option' value="${index}">${item}</option>
 			`;
 		});
-
 	}
 	renderCategory();
 
-	
-	function chooseCategory() { 
+	// === / Render category ===
 
+	// === Choose category ===  
+
+	function chooseCategory() { 
 		switch(categories.value) { 
 			case '0': 
 			url ='https://the-trivia-api.com/api/questions?categories=history&limit=5&region=US&difficulty=medium'
 			getData(url)
 			.then((data)=>  {
-					clearAnswer();
-					renderQuestion(data);	
+					reloadPage(data);
 				})
 				.catch((error)=>  {
-					console.error(error)
+					console.error(error);
 				});
 			break;
 			case '1': 
 			url ='https://the-trivia-api.com/api/questions?categories=music&limit=5&region=US&difficulty=medium'
 			getData(url)
 				.then((data)=>  {
-					clearAnswer();
-					renderQuestion(data);			
+					reloadPage(data);
 				})
 				.catch((error)=>  {
 					console.error(error);
@@ -58,8 +57,7 @@ const titleQuize = document.querySelector('#header'),
 			url ='https://the-trivia-api.com/api/questions?categories=science&limit=5&region=US&difficulty=medium'
 			getData(url)
 				.then((data)=>  {
-					clearAnswer();
-					renderQuestion(data);			
+					reloadPage(data);	
 				})
 				.catch((error)=>  {
 					console.error(error);
@@ -69,8 +67,7 @@ const titleQuize = document.querySelector('#header'),
 			url ='https://the-trivia-api.com/api/questions?categories=geography&limit=5&region=US&difficulty=medium'
 			getData(url)
 				.then((data)=>  {
-					clearAnswer();
-					renderQuestion(data);			
+					reloadPage(data);
 				})
 				.catch((error)=>  {
 					console.error(error);
@@ -81,12 +78,23 @@ const titleQuize = document.querySelector('#header'),
 			break;
 		}
 	}
-	;
-	categories.addEventListener('change', chooseCategory);
-	
-	// get Data
-	
 
+	categories.addEventListener('change', chooseCategory);
+
+	// === / Choose category ===  
+
+	// === Reload page after choose ==
+
+	const reloadPage = (data) => { 
+		clearAnswer();
+		renderQuestion(data);
+		document.location.reload();	
+	};
+	
+	// ===  /Reload page after choose ==
+
+	// === get Data ===
+	
 	const getData = async (url) => { 
 		const res = await fetch(url);
 		const data = await res.json();
@@ -100,18 +108,10 @@ const titleQuize = document.querySelector('#header'),
 
 	getData(url)
 		.then((data) =>  {
-			console.log(data);
-			console.log('data[questionIndex].correctAnswer', data[questionIndex].correctAnswer);
-			// data.forEach(item => console.log(item))
-			// console.log(data[questionIndex].question); 
 			renderQuestion(data);
-			// checkAnswer();
-			
 			submitQuize.addEventListener('click', () =>  {
 				checkAnswer(data);
-
 			});
-
 			game.classList.remove('hidden');
 			loader.classList.add('hidden');
 		})
@@ -119,14 +119,15 @@ const titleQuize = document.querySelector('#header'),
 			console.error(error);
 		});
 
-	// console.log(getData());
+	// === / get Data ===
 	
 	function clearAnswer() { 
 		titleQuize.innerHTML = '';
 		listQuize.innerHTML = '';
 	}
 	clearAnswer();
-
+	// === Render question ===
+	
 	function renderQuestion(data) { 
 
 		let answers = [];
@@ -136,17 +137,13 @@ const titleQuize = document.querySelector('#header'),
 		});
 		answers.push(data[questionIndex].correctAnswer);
 
-		randomArrayShuffle(answers)
-		//progress bur 
-		questionIndex++;
-		progressText.innerHTML = `Question ${questionIndex}/${data.length-1}`;
-		console.log(`${(questionIndex / data.length) * 100}`);
-		progressBarFull.style.width = `${(questionIndex / data.length) * 100}%`;
-
+		randomArrayShuffle(answers);
+		renderProgressBar(data);
+		
 		titleQuize.innerHTML =  `
 		<h2 class="title">${data[questionIndex].question}</h2>
 		` ;		
-
+		
 		answers.forEach((item, index) =>  {
 			
 			listQuize.innerHTML += `
@@ -162,42 +159,48 @@ const titleQuize = document.querySelector('#header'),
 		data[questionIndex];
 	}
 
-	function checkAnswer(data) { 
-		
-		const inputQuize = listQuize.querySelector('input[type="radio"]:checked');
-		// console.log(inputQuize.nextElementSibling.textContent);
-		console.log('data ISSSS', data);
+	// === / Render question ===
 
-			if(!inputQuize && questionIndex !== data.length-1) { 
-				alert('Pleace select 1 answer')
+	// === Progress bur ===
+
+	function renderProgressBar(data) { 
+		
+		progressText.innerHTML = `Question ${questionIndex}/${data.length}`;
+		// console.log(`${(questionIndex / data.length) * 100}`);
+		progressBarFull.style.width = `${(questionIndex / data.length) * 100}%`;
+	}
+	
+	// === / Progress bur ===
+
+	// === Check answer === 
+	 
+	function checkAnswer(data) { 
+		const inputQuize = listQuize.querySelector('input[type="radio"]:checked');
+		
+			if(!inputQuize && submitQuize.textContent !== 'Try again' ) { 
+				alert('Pleace select 1 answer');
 				submitQuize.blur();
 				return;
 			}
-			console.log(data);
-			
-
 			if(inputQuize.nextElementSibling.textContent === data[questionIndex].correctAnswer) {
-				console.log('done correct')
 				score++;
-				console.log(score)
 			}
-
-			if(questionIndex !== data.length-1) { 
-				
+			questionIndex++;
+			if(questionIndex !== data.length) { 
 				clearAnswer();	
 				renderQuestion(data);
 				
-			}else {
-				
+			}else {	
 				clearAnswer();
 				showResults();
 			}
-			
-			
 			return data;
 			
 	}
 
+	// ===  / Check answer ===
+
+	// === Shoow results === 
 
 	function showResults() { 
 		
@@ -217,7 +220,7 @@ const titleQuize = document.querySelector('#header'),
 					message = `You answered ${(score * 100) / data.length}%`;
 				}
 				
-				result = `${score} of ${data.length-1}`;
+				result = `${score} of ${data.length}`;
 				
 			const resultTemplate = `
 				<h2 class="title">${title}</h2>
@@ -233,17 +236,16 @@ const titleQuize = document.querySelector('#header'),
 			console.log(score);
 
 			titleQuize.innerHTML = resultTemplate;
-			console.log(`${(questionIndex / data.length) * 100}`);
-			questionIndex++;
-			progressBarFull.style.width = `${(questionIndex / data.length) * 100}%`;
+			renderProgressBar(data);
+		})
+		.catch((error) => { 
+			console.error(error);
 		});
-		
-			
 	}
 
-	
+	// === /Shoow results === 
 
-
+	// === Get random array ===
 
 	function randomArrayShuffle(array) {
 		let currentIndex = array.length, temporaryValue, randomIndex;
@@ -255,65 +257,6 @@ const titleQuize = document.querySelector('#header'),
 		  array[randomIndex] = temporaryValue;
 		}
 		return array;
-	  }
+	}
 
-
-
-	//   const reverseSeq = n => {
-	// 	// return n > 0 ? n-- : n.split("") ;
-	// 	let res = [];
-	// 	while(n>0) { 
-	// 		res.push(n--);
-	// 	}
-	// 	return res;
-	//   };
-
-	//   console.log(reverseSeq(5));
-	
-	//   function areYouPlayingBanjo(name) {
-	// 	let play =`${name} plays banjo`;
-	// 	let dose =`${name} does not play banjo`;
-	// 		for(let i = 0; i<name.length; i++) { 
-	// 		let ap =  name[i] === 'R' ||  name[i] === 'r' ?  play : dose ;
-	// 		//   if(name[i] === 'R' ||  name[i] === 'r') { 
-	// 		// 	return play
-	// 		//   }else {
-	// 		// 	return dose
-	// 		//   }
-	// 		return ap
-	// 		}
-		
-	//   }
-	//   console.log(areYouPlayingBanjo('Robvert'));
-
-	//   function invert(array) {
-	// 	return array.map((item) => -item );
-	// }
-	//  console.log(invert([1,2,-3,4,5])) ;
-
-	// function printerError(s) {
-	// 	let currentArr = [...s];
-	// 	let correct =  'abcdefghijklm';
-	// 	let correctArr = [...correct];
-
-	// 	console.log('splite is', s.split(''));
-	// 	console.log('spread', currentArr);
-
-	// 	let pop = currentArr.filter(i => !correctArr.includes(i))
-	// 		.concat(currentArr.filter(i=>!currentArr.includes(i)));
-
-	// 		console.log(pop)
-	// 		// pop
-	// 		// [
-	// 		// 	'x', 'y', 'y',
-	// 		// 	'w', 'w', 'w',
-	// 		// 	'w', 'w', 'с'
-	// 		// ]
-	// 		// 
-
-	// 	return `${pop.length}/${s.length}`;
-		
-	// }
-	// console.log(printerError('aaaxbbbbyyhwawiwjjjwwmс')); 
-
-	// [ТекущиеЭлементыВМассиве].идтиПоНимФильтром.(ВозвращаяЭлементКоторогоНетВ[ПравильномМассиве])
+	// ===  / Get random array === 

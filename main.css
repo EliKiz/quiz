@@ -1,10 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap");
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap');
 
 * {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 	font-size: inherit;
+	font-family: 'Quicksand', sans-serif;
 }
 
 body {
@@ -199,11 +201,14 @@ body {
 .quiz-form { 
 	display: flex;
 }
-.quiz-category{ 
+.quiz-category{
+	display: flex;
+	align-items: center;
 	width: 300px;
 }
 #category {
 	border-radius: 5px;
+	height: 25px;
 }
 
 #category:hover { 
@@ -221,6 +226,10 @@ body {
 	height: 10px;
 	border: 1px solid #8e44ad;
 	border-radius: 5px
+}
+.quiz-bar-text { 
+	padding-bottom: 5px;
+	text-align: center;
 }
 .quiz-progress-bar-full {
 	height: 9px;
