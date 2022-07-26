@@ -236,3 +236,11 @@ body {
 	background-color: #8e44ad;
 	width: 0%;
 }
+.correct {
+	background-color:rgba(36, 144, 77, 0.273);
+	font-weight: 700;
+}
+
+.incorrect { 
+	background-color:rgb(218, 59, 59);
+}
